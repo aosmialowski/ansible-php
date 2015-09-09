@@ -1,0 +1,165 @@
+---
+- set_fact:
+    php_download_filename: "php-{{ php_version }}.tar.gz"
+    php_download_directory: "php-{{ php_version }}"
+
+- name: Update APT cache
+  apt: update_cache=yes cache_valid_time=86400
+
+- name: Ensure dependencies are installed
+  apt: "pkg={{ item }} state=present"
+  with_items:
+    - build-essential
+    - autoconf
+    - automake
+    - libtool
+    - bison
+    - re2c
+    - libxml2-dev
+    - libcurl4-openssl-dev
+    - libbz2-dev
+    - libjpeg-dev
+    - libpng12-dev
+    - libxpm-dev
+    - libfreetype6-dev
+    - libgmp3-dev
+    - libmcrypt-dev
+    - libmysqlclient-dev
+    - libpspell-dev
+    - librecode-dev
+    - libicu-dev
+    - libc-client2007e-dev
+    - libxslt1-dev
+
+- name: Check if GMP header is already in a location accessible by GCC
+  stat: path=/usr/include/gmp.h
+  register: gmp_file
+
+- name: Ensure GMP header is symlinked into a location accessible by GCC
+  file: src=/usr/include/x86_64-linux-gnu/gmp.h dest=/usr/include/gmp.h state=link force=true
+  when: gmp_file.stat.exists == false
+
+- name: Download PHP sources package
+  get_url: url=http://php.net/get/{{ php_download_filename }}/from/this/mirror dest=/usr/src
+
+- name: Unpack the archive into /usr/src directory
+  unarchive: src=/usr/src/{{ php_download_filename }} dest=/usr/src copy=no
+
+- name: Configure PHP compilation
+  shell: >
+    ./configure
+    --prefix=/usr/local
+    --enable-mbstring
+    --enable-fpm
+    --enable-intl
+    --enable-zip
+    --enable-bcmath
+    --enable-pcntl
+    --enable-ftp
+    --enable-exif
+    --enable-calendar
+    --enable-opcache
+    --enable-pdo
+    --enable-sysvmsg
+    --enable-sysvsem
+    --enable-sysvshm
+    --enable-wddx
+    --with-curl
+    --with-mcrypt
+    --with-iconv
+    --with-gmp
+    --with-kerberos
+    --with-imap-ssl
+    --with-pspell
+    --with-gd
+    --with-jpeg-dir=/usr
+    --with-png-dir=/usr
+    --with-zlib-dir=/usr
+    --with-xpm-dir=/usr
+    --with-freetype-dir=/usr
+    --enable-gd-native-ttf
+    --enable-gd-jis-conv
+    --with-openssl
+    --with-pdo-mysql=/usr
+    --with-gettext=/usr
+    --with-zlib=/usr
+    --with-bz2=/usr
+    --with-mysqli=mysqlnd
+    --with-xsl
+    --with-imap
+    chdir=/usr/src/{{ php_download_directory }}
+
+- name: Compile PHP
+  shell: make chdir=/usr/src/{{ php_download_directory }}
+
+- name: Install PHP
+  shell: make install chdir=/usr/src/{{ php_download_directory }}
+
+- name: Install php-fpm init script does exist
+  template: src=fpm-init.js2 dest=/etc/init.d/php-fpm mode=0755
+  notify: restart php-fpm
+
+- name: Ensure FPM configuration file does exist
+  command: mv /usr/local/etc/php-fpm.conf.default /usr/local/etc/php-fpm.conf >
+    creates=/usr/local/etc/php-fpm.conf
+    removes=/usr/local/etc/php-fpm.conf.default
+
+- name: Ensure PHP configuration file does exist
+  command: >
+    cp /usr/src/{{ php_download_directory }}/php.ini-production /usr/local/lib/php.ini
+    creates=/usr/local/lib/php.ini
+
+- name: Set FPM configuration options
+  lineinfile:
+    dest: /usr/local/lib/php.ini
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^short_open_tag =', line: 'short_open_tag = {{ php_short_open_tag }}' }
+    - { regexp: '^expose_php =', line: 'expose_php = {{ php_expose_php }}' }
+    - { regexp: '^max_execution_time =', line: 'max_execution_time = {{ php_max_execution_time }}' }
+    - { regexp: '^max_input_time =', line: 'max_input_time = {{ php_max_input_time }}' }
+    - { regexp: '^memory_limit =', line: 'memory_limit = {{ php_memory_limit }}' }
+    - { regexp: '^post_max_size =', line: 'post_max_size = {{ php_post_max_size }}' }
+    - { regexp: '^upload_max_filesize =', line: 'upload_max_filesize = {{ php_upload_max_filesize }}' }
+    - { regexp: '^max_input_vars =', line: 'max_input_vars = {{ php_max_input_vars }}' }
+    - { regexp: '^realpath_cache_size =', line: 'realpath_cache_size = {{ php_realpath_cache_size }}' }
+    - { regexp: '^date.timezone =', line: 'date.timezone = {{ php_date_timezone }}' }
+    - { regexp: '^sendmail_path =', line: 'sendmail_path = {{ php_sendmail_path }}' }
+    - { regexp: '^error_reporting =', line: 'error_reporting = {{ php_error_reporting }}' }
+    - { regexp: '^display_errors =', line: 'display_errors = {{ php_display_errors }}' }
+    - { regexp: '^display_startup_errors =', line: 'display_startup_errors = {{ php_display_startup_errors }}' }
+    - { regexp: '^;?opcache.enable=', line: 'opcache.enable={{ php_opcache_enable }}' }
+    - { regexp: '^;?opcache.enable_cli=', line: 'opcache.enable_cli={{ php_opcache_enable_cli }}' }
+    - { regexp: '^;?opcache.memory_consumption=', line: 'opcache.memory_consumption={{ php_opcache_memory_consumption }}' }
+    - { regexp: '^;?opcache.interned_strings_buffer=', line: 'opcache.interned_strings_buffer={{ php_opcache_interned_strings_buffer }}' }
+    - { regexp: '^;?opcache.max_accelerated_files=', line: 'opcache.max_accelerated_files={{ php_opcache_max_accelerated_files }}' }
+    - { regexp: '^;?opcache.max_wasted_percentage=', line: 'opcache.max_wasted_percentage={{ php_opcache_max_wasted_percentage }}' }
+    - { regexp: '^;?opcache.validate_timestamps=', line: 'opcache.validate_timestamps={{ php_opcache_validate_timestamps }}' }
+    - { regexp: '^;?opcache.revalidate_freq=', line: 'opcache.revalidate_freq={{ php_opcache_revalidate_freq }}' }
+    - { regexp: '^;?opcache.max_file_size=', line: 'opcache.max_file_size={{ php_opcache_max_file_size }}' }
+
+- name: Set PHP configuration options
+  lineinfile:
+    dest: /usr/local/etc/php-fpm.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: '^user =', line: 'user = {{ php_socket_owner }}' }
+    - { regexp: '^group =', line: 'group = {{ php_socket_group }}' }
+    - { regexp: '^listen =', line: 'listen = /usr/local/var/run/php-fpm.sock' }
+    - { regexp: '^listen.owner =', line: 'listen.owner = {{ php_socket_owner }}' }
+    - { regexp: '^listen.group =', line: 'listen.group = {{ php_socket_group }}' }
+    - { regexp: '^listen.mode =', line: 'listen.mode = 0660' }
+
+- name: Set PECL/PEAR configuration options
+  shell: "{{ item }}"
+  with_items:
+    - pear config-set php_ini /usr/local/lib/php.ini
+    - pecl config-set php_ini /usr/local/lib/php.ini
+  notify: restart php-fpm
+
+- name: Install optional PECL extensions
+  shell: pecl install -f {{ item }}
+  with_items:
+    php_pecl_extensions
