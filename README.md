@@ -29,4 +29,4 @@ BSD
 Author Information
 -------
 
-Find [Andrzej Ośmiałowski]( http://osmialowski.net ) on [Twitter](http://twitter.com/aosmialowski).
+Find [Andrzej Osmialowski]( http://osmialowski.net ) on [Twitter](http://twitter.com/aosmialowski).
