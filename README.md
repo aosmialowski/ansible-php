@@ -1,5 +1,5 @@
-# Aansible PHP Role
-An Ansible role for installing/configuring [PHP](https://www.php.net/) on Ubuntu.
+# Aansible - PHP
+Ansible role that installs/configures [PHP](https://www.php.net/) on Ubuntu.
 
 ## Requirements
 
