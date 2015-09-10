@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: Andrzej Ośmiałówski
+  description: Ansible role that installs/configures PHP on Ubuntu.
+  license: MIT
+  min_ansible_version: 1.4
+  - name: Ubuntu
+    versions:
+    - lucid
+    - maverick
+    - trusty
+  categories:
+  - development
+  - system
+  - web
+dependencies: []
