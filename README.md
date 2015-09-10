@@ -1,4 +1,4 @@
-# Aansible - PHP
+# Ansible Role: PHP
 Ansible role that installs/configures [PHP](https://www.php.net/) on Ubuntu.
 
 ## Requirements
@@ -43,4 +43,4 @@ THE SOFTWARE.
 
 ## Author Information
 
-This role was created in 2015 by [Andrzej Ośmiałowski](http://osmialowski.net/).
+Find [Andrzej Ośmiałowski]( http://osmialowski.net ) on [Twitter](http://twitter.com/aosmialowski).
