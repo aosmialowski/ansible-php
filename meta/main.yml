@@ -4,13 +4,14 @@ galaxy_info:
   description: Ansible role that installs/configures PHP on Ubuntu.
   license: MIT
   min_ansible_version: 1.4
-  - name: Ubuntu
-    versions:
-    - lucid
-    - maverick
-    - trusty
+  platforms:
+    - name: Ubuntu
+      versions:
+        - lucid
+        - maverick
+        - trusty
   categories:
-  - development
-  - system
-  - web
+    - development
+    - system
+    - web
 dependencies: []
