@@ -2,7 +2,7 @@
 galaxy_info:
   author: Andrzej Ośmiałówski
   description: Ansible role that installs/configures PHP on Ubuntu.
-  license: MIT
+  license: BSD
   min_ansible_version: 1.4
   platforms:
     - name: Ubuntu
