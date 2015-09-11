@@ -10,7 +10,6 @@ install:
   - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
 
 script:
-  - echo localhost > tests/inventory
   - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
   - travis_wait ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo
 
