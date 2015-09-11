@@ -1,6 +1,8 @@
 Ansible Role: PHP
 =========
 
+[![Build Status](https://travis-ci.org/aosmialowski/ansible-php.svg?branch=master)](https://travis-ci.org/aosmialowski/ansible-php)
+
 Ansible role that installs/configures [PHP](https://www.php.net/) on Ubuntu.
 
 Requirements
