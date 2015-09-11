@@ -100,7 +100,8 @@
   notify: restart php-fpm
 
 - name: Ensure FPM configuration file does exist
-  command: mv /usr/local/etc/php-fpm.conf.default /usr/local/etc/php-fpm.conf >
+  command: >
+    mv /usr/local/etc/php-fpm.conf.default /usr/local/etc/php-fpm.conf
     creates=/usr/local/etc/php-fpm.conf
     removes=/usr/local/etc/php-fpm.conf.default
 
