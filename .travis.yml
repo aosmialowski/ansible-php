@@ -21,6 +21,6 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   - >
-    which php
+    php -v | grep -q '5.6.13'
     && (echo 'PHP is installed' && exit 0)
     || (echo 'PHP is not installed' && exit 1)
