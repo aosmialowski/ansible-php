@@ -1,8 +1,4 @@
 ---
-- set_fact:
-    php_download_filename: "php-{{ php_version }}.tar.gz"
-    php_download_directory: "php-{{ php_version }}"
-
 - name: Update APT cache
   apt: update_cache=yes cache_valid_time=86400
 
@@ -40,7 +36,7 @@
   when: gmp_file.stat.exists == false
 
 - name: Download PHP sources package
-  get_url: url=http://php.net/get/{{ php_download_filename }}/from/this/mirror dest=/usr/src
+  get_url: url={{ php_download_url }} dest=/usr/src
 
 - name: Unpack the archive into /usr/src directory
   unarchive: src=/usr/src/{{ php_download_filename }} dest=/usr/src copy=no

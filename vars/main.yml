@@ -1,0 +1,4 @@
+---
+php_download_filename: "php-{{ php_version }}.tar.gz"
+php_download_directory: "php-{{ php_version }}"
+php_download_url: "http://php.net/get/{{ php_download_filename }}/from/this/mirror"
