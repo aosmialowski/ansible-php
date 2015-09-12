@@ -44,7 +44,7 @@
 - name: Configure PHP compilation
   shell: >
     ./configure
-    --prefix=/usr/local
+    --prefix={{ php_install_path }}
     --enable-mbstring
     --enable-fpm
     --enable-intl
@@ -97,18 +97,18 @@
 
 - name: Ensure FPM configuration file does exist
   command: >
-    mv /usr/local/etc/php-fpm.conf.default /usr/local/etc/php-fpm.conf
-    creates=/usr/local/etc/php-fpm.conf
-    removes=/usr/local/etc/php-fpm.conf.default
+    mv {{ php_install_path }}/etc/php-fpm.conf.default {{ php_install_path }}/etc/php-fpm.conf
+    creates={{ php_install_path }}/etc/php-fpm.conf
+    removes={{ php_install_path }}/etc/php-fpm.conf.default
 
 - name: Ensure PHP configuration file does exist
   command: >
-    cp /usr/src/{{ php_download_directory }}/php.ini-production /usr/local/lib/php.ini
-    creates=/usr/local/lib/php.ini
+    cp /usr/src/{{ php_download_directory }}/php.ini-production {{ php_install_path }}/lib/php.ini
+    creates={{ php_install_path }}/lib/php.ini
 
 - name: Set FPM configuration options
   lineinfile:
-    dest: /usr/local/lib/php.ini
+    dest: "{{ php_install_path }}/lib/php.ini"
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
@@ -138,13 +138,13 @@
 
 - name: Set PHP configuration options
   lineinfile:
-    dest: /usr/local/etc/php-fpm.conf
+    dest: "{{ php_install_path }}/etc/php-fpm.conf"
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
     - { regexp: '^user =', line: 'user = {{ php_socket_owner }}' }
     - { regexp: '^group =', line: 'group = {{ php_socket_group }}' }
-    - { regexp: '^listen =', line: 'listen = /usr/local/var/run/php-fpm.sock' }
+    - { regexp: '^listen =', line: 'listen = {{ php_install_path }}/var/run/php-fpm.sock' }
     - { regexp: '^listen.owner =', line: 'listen.owner = {{ php_socket_owner }}' }
     - { regexp: '^listen.group =', line: 'listen.group = {{ php_socket_group }}' }
     - { regexp: '^listen.mode =', line: 'listen.mode = 0660' }
@@ -152,8 +152,8 @@
 - name: Set PECL/PEAR configuration options
   shell: "{{ item }}"
   with_items:
-    - pear config-set php_ini /usr/local/lib/php.ini
-    - pecl config-set php_ini /usr/local/lib/php.ini
+    - pear config-set php_ini {{ php_install_path }}/lib/php.ini
+    - pecl config-set php_ini {{ php_install_path }}/lib/php.ini
   notify: restart php-fpm
 
 - name: Install optional PECL extensions
