@@ -5,32 +5,32 @@ php_version: 5.6.13
 php_socket_owner: www-data
 php_socket_group: www-data
 
-php_expose_php: On
-php_memory_limit: 256M
-php_max_execution_time: 60
-php_max_input_time: 60
-php_max_input_vars: 1000
-php_realpath_cache_size: 32K
-php_post_max_size: 128M
-php_upload_max_filesize: 64M
+php_expose_php: 'On'
+php_memory_limit: '256M'
+php_max_execution_time: '60'
+php_max_input_time: '60'
+php_max_input_vars: '1000'
+php_realpath_cache_size: '32K'
+php_post_max_size: '128M'
+php_upload_max_filesize: '64M'
 php_date_timezone: "America/Chicago"
 
 php_sendmail_path: "/usr/sbin/sendmail -t -i"
-php_short_open_tag: false
+php_short_open_tag: 'Off'
 
 php_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
-php_display_errors: Off
-php_display_startup_errors: Off
+php_display_errors: 'Off'
+php_display_startup_errors: 'Off'
 
-php_opcache_enable: 1
-php_opcache_enable_cli: 0
-php_opcache_memory_consumption: 96
-php_opcache_interned_strings_buffer: 16
-php_opcache_max_accelerated_files: 4096
-php_opcache_max_wasted_percentage: 5
-php_opcache_validate_timestamps: 1
-php_opcache_revalidate_freq: 2
-php_opcache_max_file_size: 0
+php_opcache_enable: '1'
+php_opcache_enable_cli: '0'
+php_opcache_memory_consumption: '64'
+php_opcache_interned_strings_buffer: '4'
+php_opcache_max_accelerated_files: '200'
+php_opcache_max_wasted_percentage: '5'
+php_opcache_validate_timestamps: '1'
+php_opcache_revalidate_freq: '2'
+php_opcache_max_file_size: '0'
 
 php_pecl_extensions: []
 
