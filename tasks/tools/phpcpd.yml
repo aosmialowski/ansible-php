@@ -1,0 +1,2 @@
+- name: Install PHP Copy/Paste Detector
+  get_url: url=https://phar.phpunit.de/phpcpd.phar dest=/usr/local/bin/phpcpd owner=root group=root mode=0755

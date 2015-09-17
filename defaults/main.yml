@@ -39,3 +39,12 @@ php_download_directory: "php-{{ php_version }}"
 php_download_url: "http://php.net/get/{{ php_download_filename }}/from/this/mirror"
 
 php_install_path: /usr/local
+
+php_composer: false
+php_phpcpd: false
+php_phpcs: false
+php_pdepend: false
+php_phpdoc: false
+php_phploc: false
+php_phpmd: false
+php_phpunit: false
