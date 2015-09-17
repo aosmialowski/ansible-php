@@ -150,7 +150,3 @@
 - include: tools/phpunit.yml
   when: php_phpunit == true
   tags: [phpunit]
-
-- include: tools/xdebug.yml
-  when: php_xdebug == true
-  tags: [xdebug]
