@@ -115,7 +115,7 @@
   notify: restart php-fpm
 
 - name: Install optional PECL extensions
-  shell: pecl install -f {{ item }}
+  shell: printf "\n" | pecl install -f {{ item }}
   with_items:
     php_pecl_extensions
 
