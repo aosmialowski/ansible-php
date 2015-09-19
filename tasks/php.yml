@@ -131,6 +131,7 @@
   shell: printf "\n" | pecl install -f {{ item }}
   with_items:
     php_pecl_extensions
+  tags: [pecl]
 
 - include: tools/composer.yml
   when: php_composer == true
