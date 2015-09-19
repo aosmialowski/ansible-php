@@ -35,11 +35,20 @@
   file: src=/usr/include/x86_64-linux-gnu/gmp.h dest=/usr/include/gmp.h state=link force=true
   when: gmp_file.stat.exists == false
 
+- name: Check previously installed PHP version
+  shell: php -i | grep -m 1 'PHP Version' | sed -ne 's/[^0-9]*\(\([0-9]\.\)\{0,4\}[0-9]\)\.*/\1/p'
+  register: php_installed_version
+
+- set_fact:
+    php_installed: "{{ php_version == php_installed_version.stdout }}"
+
 - name: Download PHP sources package
   get_url: url={{ php_download_url }} dest=/usr/src
+  when: php_installed == false
 
 - name: Unpack the archive into /usr/src directory
   unarchive: src=/usr/src/{{ php_download_filename }} dest=/usr/src copy=no
+  when: php_installed == false
 
 - name: Configure PHP compilation
   shell: >
@@ -84,16 +93,20 @@
     --with-xsl
     --with-imap
     chdir=/usr/src/{{ php_download_directory }}
+  when: php_installed == false
 
 - name: Compile PHP
   shell: make chdir=/usr/src/{{ php_download_directory }}
+  when: php_installed == false
 
 - name: Install PHP
   shell: make install chdir=/usr/src/{{ php_download_directory }}
+  when: php_installed == false
 
 - name: Install php-fpm init script does exist
   template: src=fpm-init.js2 dest=/etc/init.d/php-fpm mode=0755
   notify: restart php-fpm
+  when: php_installed == false
 
 - name: Create FPM configuration file
   template: src=php-fpm.conf.js2 dest={{ php_install_path }}/etc/php-fpm.conf
