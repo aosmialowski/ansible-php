@@ -57,6 +57,7 @@
 
 - name: Generate configure script
   shell: ./buildconf --force chdir=/usr/src/php-src
+  when: php_installed|bool == False
 
 - name: Configure PHP compilation
   shell: >
