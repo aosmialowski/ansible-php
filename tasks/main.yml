@@ -42,13 +42,21 @@
 - set_fact:
     php_installed: "{{ php_version == php_installed_version.stdout }}"
 
-- name: Download PHP sources package
-  get_url: url={{ php_download_url }} dest=/usr/src
+- name: Ensure PHP installation path does exist
+  file: path="{{ php_installation_path }}" state=directory mode=0755
   when: php_installed|bool == False
 
-- name: Unpack the archive into /usr/src directory
-  unarchive: src=/usr/src/{{ php_download_filename }} dest=/usr/src copy=no
+- name: Clone PHP sources repository
+  git:
+    repo: https://git.php.net/repository/php-src.git
+    dest: /usr/src/php-src
+    version: "php-{{ php_version }}"
+    accept_hostkey: yes
+    depth: 1
   when: php_installed|bool == False
+
+- name: Generate configure script
+  shell: ./buildconf --force chdir=/usr/src/php-src
 
 - name: Configure PHP compilation
   shell: >
@@ -92,15 +100,15 @@
     --with-mysqli=mysqlnd
     --with-xsl
     --with-imap
-    chdir=/usr/src/{{ php_download_directory }}
+    chdir=/usr/src/php-src
   when: php_installed|bool == False
 
 - name: Compile PHP
-  shell: make chdir=/usr/src/{{ php_download_directory }}
+  shell: make --jobs={{ ansible_processor_cores }} chdir=/usr/src/php-src
   when: php_installed|bool == False
 
 - name: Install PHP
-  shell: make install chdir=/usr/src/{{ php_download_directory }}
+  shell: make install chdir=/usr/src/php-src
   when: php_installed|bool == False
 
 - name: Install php-fpm init script

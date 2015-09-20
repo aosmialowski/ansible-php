@@ -33,10 +33,6 @@ php_opcache_max_file_size: '0'
 
 php_pecl_extensions: []
 
-php_download_filename: "php-{{ php_version }}.tar.gz"
-php_download_directory: "php-{{ php_version }}"
-php_download_url: "http://php.net/get/{{ php_download_filename }}/from/this/mirror"
-
 php_installation_path: /usr/local
 
 php_composer: false
