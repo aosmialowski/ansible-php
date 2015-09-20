@@ -44,11 +44,11 @@
 
 - name: Download PHP sources package
   get_url: url={{ php_download_url }} dest=/usr/src
-  when: php_installed == false
+  when: php_installed|bool == False
 
 - name: Unpack the archive into /usr/src directory
   unarchive: src=/usr/src/{{ php_download_filename }} dest=/usr/src copy=no
-  when: php_installed == false
+  when: php_installed|bool == False
 
 - name: Configure PHP compilation
   shell: >
@@ -93,20 +93,20 @@
     --with-xsl
     --with-imap
     chdir=/usr/src/{{ php_download_directory }}
-  when: php_installed == false
+  when: php_installed|bool == False
 
 - name: Compile PHP
   shell: make chdir=/usr/src/{{ php_download_directory }}
-  when: php_installed == false
+  when: php_installed|bool == False
 
 - name: Install PHP
   shell: make install chdir=/usr/src/{{ php_download_directory }}
-  when: php_installed == false
+  when: php_installed|bool == False
 
 - name: Install php-fpm init script
   template: src=fpm-init.js2 dest=/etc/init.d/php-fpm mode=0755
   notify: restart php-fpm
-  when: php_installed == false
+  when: php_installed|bool == False
 
 - name: Create FPM configuration file
   template: src=php-fpm.conf.js2 dest={{ php_install_path }}/etc/php-fpm.conf
