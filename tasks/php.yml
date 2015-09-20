@@ -53,7 +53,7 @@
 - name: Configure PHP compilation
   shell: >
     ./configure
-    --prefix={{ php_install_path }}
+    --prefix={{ php_installation_path }}
     --enable-mbstring
     --enable-fpm
     --enable-intl
@@ -109,22 +109,22 @@
   when: php_installed|bool == False
 
 - name: Create FPM configuration file
-  template: src=php-fpm.conf.js2 dest={{ php_install_path }}/etc/php-fpm.conf
+  template: src=php-fpm.conf.js2 dest={{ php_installation_path }}/etc/php-fpm.conf
 
 - name: Create FPM pool configuration directory
-  file: path={{ php_install_path }}/etc/php-fpm.d state=directory
+  file: path={{ php_installation_path }}/etc/php-fpm.d state=directory
 
 - name: Create default FPM pool
-  template: src=fpm-pool.conf.js2 dest={{ php_install_path }}/etc/php-fpm.d/www.conf
+  template: src=fpm-pool.conf.js2 dest={{ php_installation_path }}/etc/php-fpm.d/www.conf
 
 - name: Create PHP configuration file
-  template: src=php.ini.js2 dest={{ php_install_path }}/lib/php.ini
+  template: src=php.ini.js2 dest={{ php_installation_path }}/lib/php.ini
 
 - name: Set PECL/PEAR configuration options
   shell: "{{ item }}"
   with_items:
-    - pear config-set php_ini {{ php_install_path }}/lib/php.ini
-    - pecl config-set php_ini {{ php_install_path }}/lib/php.ini
+    - pear config-set php_ini {{ php_installation_path }}/lib/php.ini
+    - pecl config-set php_ini {{ php_installation_path }}/lib/php.ini
   notify: restart php-fpm
 
 - name: Install optional PECL extensions
