@@ -1,2 +1,0 @@
-- name: Install PHP LOC
-  get_url: url=https://phar.phpunit.de/phploc.phar dest=/usr/local/bin/phploc owner=root group=root mode=0755

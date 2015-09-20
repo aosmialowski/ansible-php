@@ -133,34 +133,4 @@
     php_pecl_extensions
   tags: [pecl]
 
-- include: tools/composer.yml
-  when: php_composer == true
-  tags: [composer]
-
-- include: tools/phpcpd.yml
-  when: php_phpcpd == true
-  tags: [phpcpd]
-
-- include: tools/phpcs.yml
-  when: php_phpcs == true
-  tags: [phpcs]
-
-- include: tools/pdepend.yml
-  when: php_pdepend == true
-  tags: [pdepend]
-
-- include: tools/phpdoc.yml
-  when: php_phpdoc == true
-  tags: [phpdoc]
-
-- include: tools/phploc.yml
-  when: php_phploc == true
-  tags: [phploc]
-
-- include: tools/phpmd.yml
-  when: php_phpmd == true
-  tags: [phpmd]
-
-- include: tools/phpunit.yml
-  when: php_phpunit == true
-  tags: [phpunit]
+- include: tools.yml

@@ -1,2 +1,0 @@
-- name: Install PHPUnit
-  get_url: url=https://phar.phpunit.de/phpunit.phar dest=/usr/local/bin/phpunit owner=root group=root mode=0755

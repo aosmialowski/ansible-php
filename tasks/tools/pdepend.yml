@@ -1,2 +1,0 @@
-- name: Install PHP Depend
-  get_url: url=http://static.pdepend.org/php/latest/pdepend.phar dest=/usr/local/bin/pdepend owner=root group=root mode=0755

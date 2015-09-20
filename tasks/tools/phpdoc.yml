@@ -1,2 +1,0 @@
-- name: Install PHP Documentor
-  get_url: url=http://phpdoc.org/phpDocumentor.phar dest=/usr/local/bin/phpdoc owner=root group=root mode=0755

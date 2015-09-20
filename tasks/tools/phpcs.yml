@@ -1,5 +1,0 @@
-- name: Install PHP Code Sniffer
-  get_url: url=https://squizlabs.github.io/PHP_CodeSniffer/{{ item }}.phar dest=/usr/local/bin/{{ item }} owner=root group=root mode=0755
-  with_items:
-    - phpcs
-    - phpcbf

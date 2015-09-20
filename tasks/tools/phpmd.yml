@@ -1,2 +1,0 @@
-- name: Install PHP Mess Detector
-  get_url: url=http://static.phpmd.org/php/latest/phpmd.phar dest=/usr/local/bin/phpmd owner=root group=root mode=0755
